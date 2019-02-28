@@ -14,17 +14,7 @@ app.use(function(request, response, next){
     next();
 });
 app.use(function (request, response) {
-    response.send(`<!DOCTYPE html>
-    <html>
-    <head>
-        <title>Главная</title>
-        <meta charset="utf-8" />
-    </head>
-    <body>
-        <h1>Главная страница</h1>
-        <h3>Привет, Express</h3>
-    </body>
-    <html>`);
+    response.sendFile(__dirname + "/index.html");
   }); 
 app.get("/", function(request, response){
     response.send("Hello");
