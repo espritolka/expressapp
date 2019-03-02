@@ -1,7 +1,8 @@
 const express = require("express");
 const fs = require("fs");
-
+const bodyParser = require("body-parser");
 const app = express();
+const urlencodedParser = bodyParser.urlencoded({extended: false}); //парсер для получения отправленных данных 
 app.use(function (request, response, next) {
 
     let now = new Date();
@@ -62,9 +63,9 @@ app.use("/globalusers", function(request, response){
 app.use("/index", function (request, response) {
     response.sendFile(__dirname + "/index.html");
 });
-const urlencodedParser = bodyParser.urlencoded({extended: false}); //парсер для получения отправленных данных 
+
  
-app.get("/register", urlencodedParser, function (request, response) {
+app.get("/register(.html)?", urlencodedParser, function (request, response) {
     response.sendFile(__dirname + "/register.html");
 });
 app.post("/register", urlencodedParser, function (request, response) {
@@ -72,6 +73,15 @@ app.post("/register", urlencodedParser, function (request, response) {
     console.log(request.body);
     response.send(`${request.body.userName} - ${request.body.userAge}`);
 });
+ 
+app.get("/products/:productId", function (request, response) {
+    response.send("productId: " + request.params["productId"])
+  });
+app.get("/categories/:categoryId/products/:productId", function (request, response) {
+    let catId = request.params["categoryId"];
+    let prodId = request.params["productId"];
+    response.send(`Категория: ${catId}  Товар: ${prodId}`);
+});  
 app.get("/", function (request, response) {
     response.send("Hello main page");
 });
