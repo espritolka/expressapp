@@ -62,6 +62,16 @@ app.use("/globalusers", function(request, response){
 app.use("/index", function (request, response) {
     response.sendFile(__dirname + "/index.html");
 });
+const urlencodedParser = bodyParser.urlencoded({extended: false}); //парсер для получения отправленных данных 
+ 
+app.get("/register", urlencodedParser, function (request, response) {
+    response.sendFile(__dirname + "/register.html");
+});
+app.post("/register", urlencodedParser, function (request, response) {
+    if(!request.body) return response.sendStatus(400);
+    console.log(request.body);
+    response.send(`${request.body.userName} - ${request.body.userAge}`);
+});
 app.get("/", function (request, response) {
     response.send("Hello main page");
 });
