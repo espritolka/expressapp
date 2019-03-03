@@ -69,12 +69,18 @@ app.post("/user", jsonParser, function (request, response) {
     response.json(`${request.body.userName} - ${request.body.userAge}`);
 });
   
-app.get("/", function(request, response){
+app.set("view engine", "hbs");
+ 
+app.use("/contact", function(request, response){
+     
+    response.render("contact.hbs");
+}); 
+app.get("/home", function(request, response){
       
     response.sendFile(__dirname + "/index.html");
 });
-// app.get("/", function (request, response) {
-//     response.send("<h1>Hello main page</h1> <small>I'm test <b>app</b></small>");
-// });
+app.get("/", function (request, response) {
+    response.send("<h1>Hello main page</h1> <small>I'm test <b>app</b></small>");
+});
 
 app.listen(3000);
