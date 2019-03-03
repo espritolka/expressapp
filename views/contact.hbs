@@ -1,11 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Контакты</title>
+    <title>{{title}}</title>
     <meta charset="utf-8" />
 </head>
 <body>
-    <h1>Контакты</h1>
-    <p>Электронный адрес: admin@mycorp.com</p>
+     
+    <h1>{{title}}</h1>
+     
+    {{#if emailsVisible}}  
+    {{!-- emailsVisible - если это свойство равно true, то блок кода между #if и /if--}}
+        <h3>Электронные адреса</h3>
+        <ul>
+            {{#each emails}}
+                <li>{{this}}</li>
+            {{/each}}
+        </ul>
+    {{/if}}
+    <p>Телефон: {{phone}}</p>
 </body>
 <html>
