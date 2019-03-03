@@ -1,4 +1,5 @@
 const express = require("express");
+const hbs = require("hbs");
 const fs = require("fs");
 const bodyParser = require("body-parser"); // определяем Router
 const productRouter = express.Router();
@@ -70,22 +71,25 @@ app.post("/user", jsonParser, function (request, response) {
 });
   
 app.set("view engine", "hbs");
+     
+hbs.registerPartials(__dirname + "/views/partials");
  
 app.use("/contact", function(request, response){
-     
-    response.render("contact.hbs", {
-        title: "Мои контакты",
-        emailsVisible: true,
-        emails: ["gavgav@mycorp.com", "mioaw@mycorp.com"],
-        phone: "+1234567890"
-    });
-});
+          
+        response.render("contact", {
+            title: "Мои контакты",
+            emailsVisible: true,
+            emails: ["gavgav@mycorp.com", "mioaw@mycorp.com"],
+            phone: "+1234567890"
+        });
+    }); 
 app.get("/home", function(request, response){
       
     response.sendFile(__dirname + "/index.html");
 });
 app.get("/", function (request, response) {
-    response.send("<h1>Hello main page</h1> <small>I'm test <b>app</b></small>");
+    response.render("home.hbs");
+  //  response.send("<h1>Hello main page</h1> <small>I'm test <b>app</b></small>");
 });
 
 app.listen(3000);
