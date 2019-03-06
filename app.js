@@ -1,12 +1,47 @@
 const express = require("express");
 const hbs = require("hbs");
-const expressHbs = require("express-handlebars");
+// const expressHbs = require("express-handlebars");
 const fs = require("fs");
 const bodyParser = require("body-parser"); // определяем Router
 const productRouter = express.Router();
 const jsonParser = express.json(); // создаем парсер для данных в формате json
 const app = express();
 const urlencodedParser = bodyParser.urlencoded({extended: false}); //парсер для получения отправленных данных 
+
+//устанавливаем настройки для файлов layout
+app.set("view engine", "hbs");
+// app.engine("hbs", expressHbs(
+//     {
+//         layoutsDir: "views/layouts", 
+//         defaultLayout: "layout",
+//         extname: "hbs",
+//         partialsDir: __dirname + '/views/partials/'
+//     }
+// ))
+//hbs.registerPartials(__dirname + "/views/partials");
+hbs.registerHelper("getTime", function(){
+     
+    var myDate = new Date();
+    var hour = myDate.getHours();
+    var minute = myDate.getMinutes();
+    var second = myDate.getSeconds();
+    if (minute < 10) {
+        minute = "0" + minute;
+    }
+    if (second < 10) {
+        second = "0" + second;
+    }
+    return "Текущее время: " + hour + ":" + minute + ":" + second;
+});
+hbs.registerHelper("createStringList", function(array){
+	
+	var result="";
+	for(var i=0; i<array.length; i++){
+		result +="<li>" + array[i] + "</li>";
+	}
+	return new hbs.SafeString("<ul>" + result + "</ul>");
+});
+
 app.use(function (request, response, next) {
 
     let now = new Date();
@@ -71,16 +106,7 @@ app.post("/user", jsonParser, function (request, response) {
     response.json(`${request.body.userName} - ${request.body.userAge}`);
 });
   
-// устанавливаем настройки для файлов layout
-app.engine("hbs", expressHbs(
-    {
-        layoutsDir: "views/layouts", 
-        defaultLayout: "layout",
-        extname: "hbs"
-    }
-))
-app.set("view engine", "hbs");
-hbs.registerPartials(__dirname + "/views/partials");
+
  
 app.use("/contact", function(request, response){
       
@@ -91,10 +117,12 @@ app.use("/contact", function(request, response){
         phone: "+1234567890"
     });
 }); 
- 
-app.use("/", function(request, response){
-      
-    response.render("home.hbs");
+
+app.get("/", function(request, response){
+	
+	response.render("home.hbs", { 
+		fruit: [ "apple", "lemon", "banana", "grape"]
+	});
 });
 
 app.listen(3000);
